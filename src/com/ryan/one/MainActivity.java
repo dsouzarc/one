@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.facebook.*;
-import com.facebook.model.*;
 import twitter4j.TwitterFactory;
 
 public class MainActivity extends Activity {
