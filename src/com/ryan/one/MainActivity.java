@@ -10,6 +10,8 @@ import twitter4j.TwitterFactory;
 
 public class MainActivity extends Activity {
 
+    /** LINK: https://github.com/yusuke/twitter4j */
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
