@@ -1,39 +1,12 @@
 package com.ryan.one;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
-
-import twitter4j.auth.RequestToken;
-import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-
-import com.google.gson.annotations.SerializedName;
-
-import android.widget.ArrayAdapter;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-
-import com.google.gson.Gson;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -45,10 +18,19 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 
-import java.io.*;
-import java.net.URLEncoder;
-
+import twitter4j.auth.RequestToken;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 public class MainActivity extends Activity {
 
@@ -87,15 +69,19 @@ public class MainActivity extends Activity {
      
     // Alert Dialog Manager
     AlertDialogManager alert = new AlertDialogManager();
+    
+    TextView theV;
  
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        log("UP HEERE");
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        theV = (TextView) findViewById(R.id.testTV);
         
         new Yo().execute();
-        
+        log("Starting");
     }
     
     private class Yo extends AsyncTask<Void, Void, Void> {
@@ -131,6 +117,7 @@ public class MainActivity extends Activity {
             httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
             httpPost.setEntity(new StringEntity("grant_type=client_credentials"));
             String rawAuthorization = getResponseBody(httpPost);
+            log("RAW\t" + rawAuthorization);
             Authenticated auth = jsonToAuthenticated(rawAuthorization);
             
             log("Something 1");
