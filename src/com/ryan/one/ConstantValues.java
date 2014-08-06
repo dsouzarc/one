@@ -1,5 +1,7 @@
 package com.ryan.one;
 
+// https://bitbucket.org/hintdesk/android-how-to-tweet-in-twitter-within-android-client/src/f8923a4a6413?at=default
+
 public final class ConstantValues {
     public static final String TWITTER_CONSUMER_KEY = "KBtsWUcTllvnlsGQdRKPaZ995";
     public static final String TWITTER_CONSUMER_SECRET = "w329zqh0InELmdlY7CEyIgdYAdlI5ZCmOXkVuyNvGhIE5m13S2";

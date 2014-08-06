@@ -8,18 +8,13 @@ import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ServusKevin
- * Date: 5/4/13
- * Time: 1:47 PM
- * To change this template use File | Settings | File Templates.
- */
 public final class TwitterUtil {
 
     private RequestToken requestToken = null;
     private TwitterFactory twitterFactory = null;
     private Twitter twitter;
+   
+    private static TwitterUtil instance = new TwitterUtil();
 
     private TwitterUtil() {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
@@ -30,20 +25,18 @@ public final class TwitterUtil {
         twitter = twitterFactory.getInstance();
     }
 
-    public TwitterFactory getTwitterFactory()
-    {
+    public TwitterFactory getTwitterFactory() {
         return twitterFactory;
     }
 
-    public void setTwitterFactory(AccessToken accessToken)
-    {
+    public void setTwitterFactory(AccessToken accessToken) {
         twitter = twitterFactory.getInstance(accessToken);
     }
 
-    public Twitter getTwitter()
-    {
+    public Twitter getTwitter() {
         return twitter;
     }
+    
     public RequestToken getRequestToken() {
         if (requestToken == null) {
             try {
@@ -55,12 +48,9 @@ public final class TwitterUtil {
         return requestToken;
     }
 
-    static TwitterUtil instance = new TwitterUtil();
-
     public static TwitterUtil getInstance() {
         return instance;
     }
-
 
     public void reset() {
         instance = new TwitterUtil();

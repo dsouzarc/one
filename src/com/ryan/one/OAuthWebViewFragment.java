@@ -11,9 +11,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-/**
- * Created by ServusKevin on 5/1/14.
- */
 public class OAuthWebViewFragment extends Fragment {
     private WebView webView;
     private String authenticationUrl;
@@ -31,12 +28,10 @@ public class OAuthWebViewFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         webView.loadUrl(authenticationUrl);
-        webView.setWebViewClient(new WebViewClient()
-        {
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.contains("oauth_verifier="))
-                {
+                if (url.contains("oauth_verifier=")) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), TwitterActivity.class);
                     intent.setData( Uri.parse(url));
                     startActivity(intent);
