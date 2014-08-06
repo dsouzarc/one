@@ -1,12 +1,5 @@
 package com.ryan.one;
 
-import org.apache.http.HttpConnection;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -29,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hintdesk.core.util.StringUtil;
+
+// https://dev.twitter.com/console
 
 public class TwitterActivity extends Activity {
 
