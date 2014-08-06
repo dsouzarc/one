@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private boolean isUseStoredTokenKey = false;
     private boolean isUseWebViewForAuthentication = false;
     
-    private final Context theC = getApplicationContext();
+    private Context theC = this;
     
     @Override
     public void onCreate(Bundle instance) { 

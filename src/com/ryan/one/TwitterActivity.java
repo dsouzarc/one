@@ -1,5 +1,13 @@
 package com.ryan.one;
 
+import org.apache.http.HttpConnection;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import twitter4j.ResponseList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
@@ -13,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +36,8 @@ public class TwitterActivity extends Activity {
     EditText editTextStatus;
     TextView textViewStatus, textViewUserName;
     
-    private final Context theC = getApplicationContext();
+    private final Context theC = this;
+    private final ConstantValues theValues = new ConstantValues(theC);
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +99,7 @@ public class TwitterActivity extends Activity {
         @Override
         protected void onPostExecute(String userName) {
             textViewUserName.setText(Html.fromHtml("<b> Welcome " + userName + "</b>"));
+            new GetTwitterFeed().execute();
         }
 
         @Override
@@ -118,42 +129,59 @@ public class TwitterActivity extends Activity {
                     TwitterUtil.getInstance().setTwitterFactory(accessToken);
                     return TwitterUtil.getInstance().getTwitter().showUser(accessToken.getUserId()).getName();
                 } catch (TwitterException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
-
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
+            return null;
         }
     }
+    
+    private class GetTwitterFeed extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Void... params) {
+            log("STARTING");
+            try {
+                final ResponseList<twitter4j.Status> theS = theValues.getTwitter().getHomeTimeline();
+                
+                for(twitter4j.Status r: theS) { 
+                    log(r.getText() + " SSS " + r.getUser().getName());
+                }
+            } catch (TwitterException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            return null;
+        }
+    }
+    
     class TwitterUpdateStatusTask extends AsyncTask<String, String, Boolean> {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            if (result)
+            if (result) {
                 Toast.makeText(theC, "Tweet successfully", Toast.LENGTH_SHORT).show();
-            else
+            }
+            else {
                 Toast.makeText(theC, "Tweet failed", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
             try {
-                final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(theC);
-                final  String accessTokenString = sharedPreferences.getString(ConstantValues.PREFERENCE_TWITTER_OAUTH_TOKEN, "");
-                final String accessTokenSecret = sharedPreferences.getString(ConstantValues.PREFERENCE_TWITTER_OAUTH_TOKEN_SECRET, "");
-
-                if (!StringUtil.isNullOrWhitespace(accessTokenString) && !StringUtil.isNullOrWhitespace(accessTokenSecret)) {
-                    final AccessToken accessToken = new AccessToken(accessTokenString, accessTokenSecret);
-                    final twitter4j.Status status = TwitterUtil.getInstance().getTwitterFactory().getInstance(accessToken).updateStatus(params[0]);
-                    return true;
-                }
-
-            } catch (TwitterException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                theValues.getTwitter().updateStatus(params[0]);
+                return true;
             }
-            return false;  //To change body of implemented methods use File | Settings | File Templates.
-
+            catch (TwitterException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
+    }
+    
+    public void log(final String message) { 
+        Log.e("com.ryan.one", message);
     }
 }
