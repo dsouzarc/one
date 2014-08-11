@@ -1,9 +1,16 @@
 package com.ryan.one;
 
 import twitter4j.auth.RequestToken;
+
+import com.facebook.Request;
+import com.facebook.SessionState;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
+import com.facebook.Response;
+
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,6 +18,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+
+import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.hintdesk.core.activities.AlertMessageBox;
 import com.hintdesk.core.util.OSUtil;
 
@@ -18,6 +28,7 @@ public class MainActivity extends Activity {
 
     /** LINK: https://github.com/yusuke/twitter4j */
     private Button loginTwitterButton;
+    private Button loginFacebookButton;
     
     private boolean isUseStoredTokenKey = false;
     private boolean isUseWebViewForAuthentication = false;
@@ -29,8 +40,11 @@ public class MainActivity extends Activity {
         super.onCreate(instance);
         setContentView(R.layout.activity_main);
         
-        loginTwitterButton = (Button) findViewById(R.id.loginButton);
+        loginTwitterButton = (Button) findViewById(R.id.twitterButton);
+        loginFacebookButton = (Button) findViewById(R.id.facebookButton);
+        
         loginTwitterButton.setOnClickListener(buttonLoginOnClickListener);
+        loginFacebookButton.setOnClickListener(buttonLoginOnClickListener);
         
         if (!OSUtil.IsNetworkAvailable(theC)) {
             AlertMessageBox.Show(MainActivity.this, "Internet connection", 
@@ -39,8 +53,14 @@ public class MainActivity extends Activity {
         }
         
         if (isUseStoredTokenKey) {
-            logIn();
+            loginTwitter();
         }
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
     
     class TwitterAuthenticateTask extends AsyncTask<String, String, RequestToken> {
@@ -67,7 +87,32 @@ public class MainActivity extends Activity {
         }
     }
     
-    private void logIn() {
+    private void loginFacebook() { 
+    	// start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+          // callback when session changes state
+          @Override
+          public void call(Session session, SessionState state, Exception exception) {
+            if (session.isOpened()) {
+
+              // make request to the /me API
+              Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                // callback after Graph API response with user object
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                  if (user != null) {
+                    loginFacebookButton.setText("Hello " + user.getName() + "!");
+                  }
+                }
+              }).executeAsync();
+            }
+          }
+        });
+    }
+    
+    private void loginTwitter() {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         if (!sharedPreferences.getBoolean(ConstantValues.PREFERENCE_TWITTER_IS_LOGGED_IN,false)) {
             new TwitterAuthenticateTask().execute();
@@ -81,7 +126,18 @@ public class MainActivity extends Activity {
     private View.OnClickListener buttonLoginOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            logIn();
+        	switch(v.getId()) { 
+        	case R.id.twitterButton:
+        		loginTwitter();
+        		break;
+        	case R.id.facebookButton:
+        		loginFacebook();
+        		break;
+    		default:
+    			break;
+        	
+        	}
+        	
         }
     };
 }

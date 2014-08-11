@@ -5,11 +5,21 @@
 	    android:orientation="vertical" >
 	     
 	    <!-- Twitter Login Button -->
-	    <Button android:id="@+id/loginButton"
+	    <Button android:id="@+id/twitterButton"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:text="Login with Twitter"
 	        android:layout_marginLeft="10dip"
 	        android:layout_marginRight="10dip"
 	        android:layout_marginTop="30dip"/>
+	    
+	    <Button
+	        android:id="@+id/facebookButton"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Login with Facebook"
+	        android:layout_marginLeft="10dip"
+	        android:layout_marginRight="10dip"
+	        android:layout_marginTop="30dip"/>
+	        
 </LinearLayout>
