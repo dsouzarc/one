@@ -51,15 +51,15 @@ public class LoginActivity extends Activity {
         super.onCreate(instance);
         setContentView(R.layout.activity_main);
         
-        
         loginTwitterButton = (Button) findViewById(R.id.twitterButton);
         loginFacebookButton = (Button) findViewById(R.id.facebookButton);
         
         loginTwitterButton.setOnClickListener(buttonLoginOnClickListener);
         loginFacebookButton.setOnClickListener(buttonLoginOnClickListener);
         
-        loginTwitter();
-        loginFacebook();
+        //loginTwitter();
+        //loginFacebook();
+        startActivity(new Intent(LoginActivity.this, AllNewsFeedActivity.class));
         
         if (!OSUtil.IsNetworkAvailable(theC)) {
             AlertMessageBox.Show(LoginActivity.this, "Internet connection", 
@@ -147,6 +147,7 @@ public class LoginActivity extends Activity {
         		break;
         	case R.id.facebookButton:
         		loginFacebook();
+        	    startActivity(new Intent(LoginActivity.this, AllNewsFeedActivity.class));
         		break;
     		default:
     			break;
