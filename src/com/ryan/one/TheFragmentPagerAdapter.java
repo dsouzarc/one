@@ -13,6 +13,7 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
+import com.facebook.model.GraphUser;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +34,6 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
     
     private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
     private final Context theC;
-    
 
     public TheFragmentPagerAdapter(FragmentManager fm, final Context theC) {
         super(fm);
@@ -47,35 +47,56 @@ public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
             
             final LinearLayout theLayout = (LinearLayout) rootInflater.findViewById(R.id.theLayout);
             
-            log("Here");
-            
-            RequestAsyncTask theRequestor = new Request(Session.getActiveSession(), "/me/home",
-                    null, HttpMethod.GET, new Request.Callback() { 
-                public void onCompleted(Response response) {
-                    try  { 
-                        JSONArray albumArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
-                        
-                        for (int i = 0; i < albumArr.length(); i++) {
-                            final JSONObject item = albumArr.getJSONObject(i);
-                            theLayout.addView(getTV("Post ID: " + item.getString("id")));
-                            
-                          
-                            theLayout.addView(getTV("fromName : " + item.getJSONObject("from").getString("name")));
-                            theLayout.addView(getTV("fromid : " + item.getJSONObject("from").getString("id")));
-                            theLayout.addView(getTV("link : " + item.getString("link")));
-                            theLayout.addView(getTV("message : " + item.getString("message")));
-                            theLayout.addView(getTV("created_time : " + item.getString("created_time")));
-                            theLayout.addView(getTV("updated_time : " + item.getString("updated_time")));
-                        }
-                    }
-                    catch(Exception e) { 
-                        e.printStackTrace();
-                    }
-                }
-            }).executeAsync();
+            final Session theSession = Session.openActiveSession(theC, getParentFragment(), false, new Session.StatusCallback() {
 
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+              if (session.isOpened()) {
+
+                // make request to the /me API
+                Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                  // callback after Graph API response with user object
+                  @Override
+                  public void onCompleted(GraphUser user, Response response) {
+                      log(response.toString());
+                      
+                  }
+                }).executeAsync();
+              }
+            }
+          });
+            
+            if(theSession.isOpened())
+                log("YO");
+            else
+                log("NO");
             return rootInflater;
         }   
+    }
+    
+    private void fbLogin() { 
+        Session.openActiveSession((Activity) theC, true, new Session.StatusCallback() {
+
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+              if (session.isOpened()) {
+
+                // make request to the /me API
+                Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                  // callback after Graph API response with user object
+                  @Override
+                  public void onCompleted(GraphUser user, Response response) {
+                      log(response.toString());
+                      
+                  }
+                }).executeAsync();
+              }
+            }
+          });
     }
     
     private TextView getTV(final String text) { 
