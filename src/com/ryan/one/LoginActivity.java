@@ -1,21 +1,32 @@
 package com.ryan.one;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import twitter4j.auth.RequestToken;
 
 import com.facebook.Request;
 import com.facebook.SessionState;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 
 import com.facebook.Response;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -24,7 +35,7 @@ import com.facebook.model.GraphUser;
 import com.hintdesk.core.activities.AlertMessageBox;
 import com.hintdesk.core.util.OSUtil;
 
-public class MainActivity extends Activity {
+public class LoginActivity extends Activity {
 
     /** LINK: https://github.com/yusuke/twitter4j */
     private Button loginTwitterButton;
@@ -40,14 +51,18 @@ public class MainActivity extends Activity {
         super.onCreate(instance);
         setContentView(R.layout.activity_main);
         
+        
         loginTwitterButton = (Button) findViewById(R.id.twitterButton);
         loginFacebookButton = (Button) findViewById(R.id.facebookButton);
         
         loginTwitterButton.setOnClickListener(buttonLoginOnClickListener);
         loginFacebookButton.setOnClickListener(buttonLoginOnClickListener);
         
+        loginTwitter();
+        loginFacebook();
+        
         if (!OSUtil.IsNetworkAvailable(theC)) {
-            AlertMessageBox.Show(MainActivity.this, "Internet connection", 
+            AlertMessageBox.Show(LoginActivity.this, "Internet connection", 
                     "You must be conntected to the Internet", AlertMessageBox.AlertMessageBoxIcon.Info);
             return;
         }

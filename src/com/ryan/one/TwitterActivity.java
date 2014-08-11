@@ -71,7 +71,7 @@ public class TwitterActivity extends Activity {
             editor.commit();
             
             TwitterUtil.getInstance().reset();
-            startActivity(new Intent(TwitterActivity.this, MainActivity.class));
+            startActivity(new Intent(TwitterActivity.this, LoginActivity.class));
         }
     };
 
