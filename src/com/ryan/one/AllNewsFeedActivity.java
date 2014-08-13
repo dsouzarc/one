@@ -16,6 +16,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.Bitmap;
 import android.app.FragmentTransaction;
 
+/**
+ * Opens ActionBar with ViewPager (See: TheFragmentPagerAdapter)
+ */
+
 
 public class AllNewsFeedActivity extends FragmentActivity {
 
@@ -97,24 +101,10 @@ public class AllNewsFeedActivity extends FragmentActivity {
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Facebook").setTabListener(tabListener);
-        //tab.setIcon(getDrawable("yoga_asana.png"));
         theActionBar.addTab(tab);
 
         tab = theActionBar.newTab().setText("Twitter").setTabListener(tabListener);
         theActionBar.addTab(tab);
-    }
-
-    public Drawable getDrawable(final String assetFileName) {
-        try {
-            return new BitmapDrawable(getApplicationContext().getResources(),
-                    Bitmap.createScaledBitmap(BitmapFactory.decodeStream
-                                    (theAssets.open(assetFileName)), SIZE, SIZE, false));
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            log(e.toString());
-            return null;
-        }
     }
 
     public void log(final String message) {

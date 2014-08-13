@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.Context;
 
-// https://bitbucket.org/hintdesk/android-how-to-tweet-in-twitter-within-android-client/src/f8923a4a6413?at=default
+/**
+ * Has all of the constant values needed
+ */
 
 public final class ConstantValues  {
     public static final String TWITTER_CONSUMER_KEY = "KBtsWUcTllvnlsGQdRKPaZ995";

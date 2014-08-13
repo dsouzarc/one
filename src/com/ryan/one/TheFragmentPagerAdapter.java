@@ -3,18 +3,6 @@ package com.ryan.one;
 import java.util.Arrays;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.RequestAsyncTask;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphUser;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -27,6 +15,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
+
+/** 
+ * Main Class
+ * Shows Newsfeeds for all social media
+ * Tab Layout
+ *    1. All newsfeed (Facebook, Twitter, Instagram)
+ *    2. Just Facebook Newsfeed
+ *    3. Just Twitter Newsfeed
+ *    4. Just Instagram Newsfeed
+ */
 
 public class TheFragmentPagerAdapter extends FragmentPagerAdapter {
 

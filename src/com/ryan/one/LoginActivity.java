@@ -1,39 +1,29 @@
 package com.ryan.one;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import twitter4j.auth.RequestToken;
-
-import com.facebook.Request;
-import com.facebook.SessionState;
-
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-
-import com.facebook.Response;
-
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.hintdesk.core.activities.AlertMessageBox;
 import com.hintdesk.core.util.OSUtil;
+
+/** 
+ * Opening class
+ * Contains the login buttons for Facebook and Twitter 
+ */
 
 public class LoginActivity extends Activity {
 
@@ -56,10 +46,6 @@ public class LoginActivity extends Activity {
         
         loginTwitterButton.setOnClickListener(buttonLoginOnClickListener);
         loginFacebookButton.setOnClickListener(buttonLoginOnClickListener);
-        
-        //loginTwitter();
-        //loginFacebook();
-        startActivity(new Intent(LoginActivity.this, AllNewsFeedActivity.class));
         
         if (!OSUtil.IsNetworkAvailable(theC)) {
             AlertMessageBox.Show(LoginActivity.this, "Internet connection", 
@@ -153,7 +139,6 @@ public class LoginActivity extends Activity {
     			break;
         	
         	}
-        	
         }
     };
 }
